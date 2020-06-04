@@ -1,14 +1,13 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var keys = require("../config/keys");
 
-// Load User model
 const User = require('../models/User');
 
 module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-      // Match user
       User.findOne({
         email: email
       }).then(user => {
@@ -16,7 +15,6 @@ module.exports = function (passport) {
           return done(null, false, { message: 'That email is not registered' });
         }
 
-        // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) throw err;
           if (isMatch) {
@@ -31,17 +29,38 @@ module.exports = function (passport) {
 
   passport.use(
     new GoogleStrategy({
-      clientID: "1049238632240-1n50kghrlk86tqkknrc581rfcjteafcm.apps.googleusercontent.com",
-      clientSecret: "0VsNfP6cKzNL3bhoUgmt48vX",
-      callbackURL: "/api/google/callback"
+      clientID: keys.clientID,
+      clientSecret: keys.clientSecret,
+      callbackURL: keys.callbackURL,
     },
       function (accessToken, refreshToken, profile, done) {
-        return done(null, profile);
+        User.findOne({ googleId: profile.id }, function (err, user) {
+          if (err) {
+            console.log(err);
+          }
+          if (!err && user !== null) {
+            done(null, user);
+          } else {
+            user = new User({
+              googleId: profile.id,
+              loginProvider: profile.provider,
+              name: profile.displayName,
+              created: Date.now()
+            });
+            user.save(function (err) {
+              if (err) {
+                console.log(err);
+              } else {
+                done(null, user);
+              }
+            });
+          }
+        });
       }
     ));
 
   passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user._id);
   });
 
   passport.deserializeUser(function (id, done) {
