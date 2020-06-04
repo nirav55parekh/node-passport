@@ -9,6 +9,9 @@ var authRoute = function (expressApp) {
 
     router.post('/login', authController.login.bind(authController));
     router.post('/signup', authController.signup.bind(authController));
+    
+    router.get('/loginWithGoogle', passport.authenticate('google',{ scope: ['profile'] }));
+    router.get('/google/callback',passport.authenticate('google'), authController.googleCallback.bind(authController));
 
     router.get('/userinfo',ensureAuthenticated, authController.userinfo.bind(authController));
 

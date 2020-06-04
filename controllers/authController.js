@@ -4,50 +4,54 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
 class AuthController extends BaseController {
-    constructor() {
-        super();
-        this.user = User;
-    }
+  constructor() {
+    super();
+    this.user = User;
+  }
 
-    login(req, res,next) {
-        passport.authenticate('local', function(err, user, info) {
-            if (err) {
-              return next(err);
-            }
+  login(req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
 
-            if (! user) {
-              return res.send({ success : false, message : 'authentication failed' });
-            }
-            
-            req.login(user, loginErr => {
-              if (loginErr) {
-                return next(loginErr);
-              }
-              return res.send({ success : true, message : 'authentication succeeded' });
-            });      
-          })(req, res, next);
-    }
+      if (!user) {
+        return res.send({ success: false, message: 'authentication failed' });
+      }
 
-    async signup(req, res) {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const data = { ...req.body, password: hashedPassword };
+      req.login(user, loginErr => {
+        if (loginErr) {
+          return next(loginErr);
+        }
+        return res.send({ success: true, message: 'authentication succeeded' });
+      });
+    })(req, res, next);
+  }
 
-        const newUser = new this.user(data);
+  googleCallback(req, res, next) {
+    this.send(res, 200, "Google",req.user);
+  }
 
-        const response = await newUser.save();
+  async signup(req, res) {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const data = { ...req.body, password: hashedPassword };
 
-        this.send(res, 200, "User created", response);
-    }
+    const newUser = new this.user(data);
 
-    userinfo(req, res) {
-        this.send(res, 200, "User", req.user);
-    }
+    const response = await newUser.save();
 
-    logout(req,res){
-        req.logOut();
+    this.send(res, 200, "User created", response);
+  }
 
-        this.send(res, 200, "Logged out", true);
-    }
+  userinfo(req, res) {
+    this.send(res, 200, "User", req.user);
+  }
+
+  logout(req, res) {
+    req.logOut();
+
+    this.send(res, 200, "Logged out", true);
+  }
 }
 
 module.exports = AuthController;

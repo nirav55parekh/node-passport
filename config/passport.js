@@ -1,10 +1,11 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Load User model
 const User = require('../models/User');
 
-module.exports = function(passport) {
+module.exports = function (passport) {
   passport.use(
     new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
       // Match user
@@ -28,12 +29,23 @@ module.exports = function(passport) {
     })
   );
 
-  passport.serializeUser(function(user, done) {
+  passport.use(
+    new GoogleStrategy({
+      clientID: "1049238632240-1n50kghrlk86tqkknrc581rfcjteafcm.apps.googleusercontent.com",
+      clientSecret: "0VsNfP6cKzNL3bhoUgmt48vX",
+      callbackURL: "/api/google/callback"
+    },
+      function (accessToken, refreshToken, profile, done) {
+        return done(null, profile);
+      }
+    ));
+
+  passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
+  passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
       done(err, user);
     });
   });
