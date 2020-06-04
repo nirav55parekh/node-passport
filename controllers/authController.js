@@ -1,7 +1,7 @@
-//include controllers
 var BaseController = require('./baseController');
 var User = require("../models/User");
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 class AuthController extends BaseController {
     constructor() {
@@ -9,8 +9,23 @@ class AuthController extends BaseController {
         this.user = User;
     }
 
-    login(req, res) {
-        this.send(res, 200, "login ok", {})
+    login(req, res,next) {
+        passport.authenticate('local', function(err, user, info) {
+            if (err) {
+              return next(err);
+            }
+
+            if (! user) {
+              return res.send({ success : false, message : 'authentication failed' });
+            }
+            
+            req.login(user, loginErr => {
+              if (loginErr) {
+                return next(loginErr);
+              }
+              return res.send({ success : true, message : 'authentication succeeded' });
+            });      
+          })(req, res, next);
     }
 
     async signup(req, res) {
@@ -30,6 +45,7 @@ class AuthController extends BaseController {
 
     logout(req,res){
         req.logOut();
+
         this.send(res, 200, "Logged out", true);
     }
 }
