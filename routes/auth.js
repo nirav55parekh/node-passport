@@ -16,6 +16,9 @@ var authRoute = function (expressApp) {
     router.get('/loginWithFacebook', passport.authenticate('facebook'));
     router.get('/facebook/callback', passport.authenticate('facebook'), authController.googleCallback.bind(authController));
 
+    router.get('/loginWithInstagram', passport.authenticate('instagram',{ scope: ['user_profile']}));
+    router.get('/instagram/callback', passport.authenticate('instagram'), authController.googleCallback.bind(authController));
+
     router.get('/userinfo', ensureAuthenticated, authController.userinfo.bind(authController));
 
     router.delete('/logout', ensureAuthenticated, authController.logout.bind(authController));

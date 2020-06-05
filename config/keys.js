@@ -8,4 +8,7 @@ module.exports = {
     FACEBOOK_CLIENT_ID: "681818815934943",
     FACEBOOK_CLIENT_SECRET: "2b22cb4de9b239b2c67f5120eef7df19",
     FACEBOOK_CALLBACK_URL: "/api/facebook/callback",
+    INSTAGRAM_CLIENT_ID: "611090386173772",
+    INSTAGRAM_CLIENT_SECRET: "43a45ba971fe6ea85558cacb956ae8f6",
+    INSTAGRAM_CALLBACK_URL: "/api/instagram/callback",
 };
