@@ -29,7 +29,7 @@ class AuthController extends BaseController {
   }
 
   googleCallback(req, res, next) {
-    this.send(res, 200, "Google",req.user);
+    this.send(res, 200, "Social login done",req.user);
   }
 
   async signup(req, res) {
