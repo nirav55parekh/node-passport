@@ -3,7 +3,7 @@ var keys = require("../../config/keys");
 
 const User = require('../../models/User');
 
-module.exports = function (passport) {
+module.exports = function (passport, User, keys) {
     passport.use(
         new GoogleStrategy({
             clientID: keys.GOOGLE_CLIENT_ID,

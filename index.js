@@ -1,15 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
 const routes = require('./routes/index');
 var bodyParser = require('body-parser');
+const passport = require('passport');
 
 const app = express();
 
 // Passport Config
-require('./config/passport')(passport);
+require('./config/passport');
 
 // DB Config
 const db = require('./config/keys').mongoURI;
