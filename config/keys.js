@@ -2,13 +2,10 @@ dbPassword = 'mongodb://localhost:27017/node-passport';
 
 module.exports = {
     mongoURI: dbPassword,
-    GOOGLE_CLIENT_ID: "1049238632240-1n50kghrlk86tqkknrc581rfcjteafcm.apps.googleusercontent.com",
-    GOOGLE_CLIENT_SECRET: "0VsNfP6cKzNL3bhoUgmt48vX",
-    GOOGLE_CALLBACK_URL: "/api/google/callback",
-    FACEBOOK_CLIENT_ID: "681818815934943",
-    FACEBOOK_CLIENT_SECRET: "2b22cb4de9b239b2c67f5120eef7df19",
-    FACEBOOK_CALLBACK_URL: "/api/facebook/callback",
-    INSTAGRAM_CLIENT_ID: "611090386173772",
-    INSTAGRAM_CLIENT_SECRET: "43a45ba971fe6ea85558cacb956ae8f6",
-    INSTAGRAM_CALLBACK_URL: "/api/instagram/callback",
+    GOOGLE_CLIENT_ID: "Google client id",
+    GOOGLE_CLIENT_SECRET: "google client secret",
+    GOOGLE_CALLBACK_URL: "/api/google/callback", //add callback api url. This api google will hit when it will send the response.
+    FACEBOOK_CLIENT_ID: "facgbook client id",
+    FACEBOOK_CLIENT_SECRET: "facebook client secret",
+    FACEBOOK_CALLBACK_URL: "/api/facebook/callback", //add callback api url. This api facebook will hit when it will send the response.
 };
